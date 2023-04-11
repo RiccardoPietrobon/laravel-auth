@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\HomeController as AdminHomeController; //importo i controller ma do un nome personalizzato altrimenti sarebbero uguali
+use App\Http\Controllers\Guest\HomeController as GuestHomeController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,18 +17,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [GuestHomeController::class, 'index']); //rotte statiche
+
+Route::get('/home', [AdminHomeController::class, 'index'])->middleware('auth')->name('home'); //verifica una rotta singola
+
+Route::middleware('auth')->prefix('profile')->name('profile.')->group(function () { // quando c'è il group ne verifica più di una
+    Route::get('/', [ProfileController::class, 'edit'])->name('edit');
+    Route::patch('/', [ProfileController::class, 'update'])->name('update');
+    Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+require __DIR__ . '/auth.php'; //serve a dividere le rotte dell'autentificazione auth
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-require __DIR__.'/auth.php';
+//prefix() metto un prefisso comune alle rotte
+//posso utilizzare un suffisso anche per il name()
