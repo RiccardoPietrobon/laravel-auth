@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\HomeController as AdminHomeController; //importo i controller ma do un nome personalizzato altrimenti sarebbero uguali
+use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Guest\HomeController as GuestHomeController;
 
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [GuestHomeController::class, 'index']); //rotte statiche
 
 Route::get('/home', [AdminHomeController::class, 'index'])->middleware('auth')->name('home'); //verifica una rotta singola
+
+
+Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function () {
+    Route::resource('projects', ProjectController::class)->parameters(['projects' => 'projects:slug']);
+});
+
 
 Route::middleware('auth')->prefix('profile')->name('profile.')->group(function () { // quando c'è il group ne verifica più di una
     Route::get('/', [ProfileController::class, 'edit'])->name('edit');
