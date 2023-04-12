@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     use HasFactory;
+
+    public function getAbstract($max = 50)
+    {
+        return substr($this->text, 0, $max) . "...";
+    }
 }

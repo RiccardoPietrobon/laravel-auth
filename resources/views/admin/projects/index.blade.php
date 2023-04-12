@@ -1,24 +1,39 @@
 @extends('layouts.app')
 
+@section('title', 'PROGETTI')
+
 @section('content')
-    <section class="container">
-        <table class="table-primary">
+    <section>
+        <table class="table table-primary">
             <thead>
                 <tr>
-                <th scope="col">#</th>
+                <th scope="col">ID</th>
                 <th scope="col">TITOLO</th>
                 <th scope="col">ABSTRACT</th>
+                <th scope="col"></th>
+
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                </tr>
+                @forelse ($projects as $project)
+                    <tr>
+                    <th scope="row">{{ $project->id }}</th>
+                    <td>{{ $project->title }}</td>
+                    <td>{{ $project->getAbstract() }}</td>
+                    <td>
+                        <a href="{{ route('admin.projects.show', $project) }}">
+                            <i class="bi bi-box-arrow-right"></i>
+                        </a>
+                    </td>
+                    </tr>
+                @empty
+                    
+                @endforelse
+                
             </tbody>
         </table>
+
+        {{ $projects->links() }}
     </section>
 
 @endsection
