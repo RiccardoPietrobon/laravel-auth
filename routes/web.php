@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [GuestHomeController::class, 'index']); //rotte statiche
 
-Route::get('/home', [AdminHomeController::class, 'index'])->middleware('auth')->name('home'); //verifica una rotta singola
+Route::get('/home', [ProjectController::class, 'index'])->middleware('auth')->name('home'); //verifica una rotta singola
 
 
 Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function () {

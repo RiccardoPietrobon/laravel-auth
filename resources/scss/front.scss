@@ -1,18 +1,18 @@
 @import '~bootstrap/scss/bootstrap';
 
 body {
-    background-color: #5d87e0;
+    background-color: #333;
 }
 
 .navbar {
-    background-color: #20418a;
+    background-color: black;
 
     a {
-        color: whitesmoke;
+        color: rgb(179, 179, 179);
     }
 
     a:hover {
-        color: rgb(179, 179, 179);
+        color: whitesmoke;
     }
 }
 

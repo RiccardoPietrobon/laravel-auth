@@ -28,7 +28,12 @@
         @include('layouts.partials.navbar')
 
         <main class="container">
-            <h1 class="my-3">@yield('title')</h1>
+            <div class="d-flex align-items-center justify-content-between">
+                <h1 class="my-3">@yield('title')</h1>
+                @yield('actions')
+
+            </div>
+
             @yield('content')
         </main>
     </div>

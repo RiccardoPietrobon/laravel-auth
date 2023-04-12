@@ -2,6 +2,14 @@
 
 @section('title', 'PROGETTI')
 
+@section('actions')
+    <div>
+        <a href="{{route('admin.projects.create')}}" class="btn btn-dark">
+            Nuovo Progetto
+        </a>
+    </div>
+@endsection
+
 @section('content')
     <section>
         <table class="table table-primary">
