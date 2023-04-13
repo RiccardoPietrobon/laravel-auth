@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run() //così rimane sempre questo utente
     {
         $user = new User;
         $user->name = 'Riccardo';

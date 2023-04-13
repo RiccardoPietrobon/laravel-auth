@@ -30,8 +30,13 @@
                     <td>{{ $project->getAbstract() }}</td>
                     <td>
                         <a href="{{ route('admin.projects.show', $project) }}">
-                            <i class="bi bi-box-arrow-right"></i>
+                            <i class="bi bi-box-arrow-right mx-1"></i>
                         </a>
+
+                        <a href="{{ route('admin.projects.edit', $project) }}">
+                            <i class="bi bi-pen-fill mx-1"></i>
+                        </a>
+                        
                     </td>
                     </tr>
                 @empty
