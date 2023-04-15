@@ -11,14 +11,14 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'text'];
+    protected $fillable = ['title', 'image', 'text'];
 
     public function getAbstract($max = 50)
     {
         return substr($this->text, 0, $max) . "...";
     }
 
-    public static function generateSlug($title)
+    public static function generateUniqueSlug($title)
     {
         $possible_slug = Str::of($title)->slug('-');
         $projects = Project::where('slug', $possible_slug)->get();
@@ -30,5 +30,15 @@ class Project extends Model
             $i++;
         }
         return $possible_slug;
+    }
+
+    protected function getUpdatedAtAttribute($value)
+    {
+        return date('d/m/Y H:i', strtotime($value)); //setta questo attributo
+    }
+
+    protected function getCreatedAtAttribute($value)
+    {
+        return date('d/m/Y H:i', strtotime($value)); //setta questo attributo
     }
 }

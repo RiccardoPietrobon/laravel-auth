@@ -11,6 +11,9 @@
 @endsection
 
 @section('content')
+
+    @include('layouts.partials.errors')
+
     <section class="card">
         <div class="card-body">
             <form action="{{route('admin.projects.update', $project)}}" method="post">
@@ -18,16 +21,22 @@
                 @method('put')
                 @csrf
 
-                <label for="title" class="form-label">Titolo</label>
-                <input type="text" name="title" id="title" class="form-control" value="{{$project->title}}"/>
+                <div class="row my-2">
+                    <label for="title" class="form-label">Titolo</label>
+                    <input type="text" name="title" id="title" class="form-control" value="{{$project->title}}"/>
+                </div>
 
-                <label for="image" class="form-label">Immagine</label>
-                <input type="text" name="imahe" id="imahe" class="form-control" value="{{$project->title}}"/>
+                <div class="row my-2">
+                    <label for="image" class="form-label">Immagine</label>
+                    <input type="text" name="image" id="image" class="form-control" value="{{$project->image}}"/>
+                </div>
 
-                <label for="text" class="form-label">Testo</label>
-                <textarea type="text" name="text" id="text" class="form-control"></textarea>
+                <div class="row my-2">
+                    <label for="text" class="form-label">Testo</label>
+                    <textarea type="text" name="text" id="text" class="form-control">{{$project->text}}</textarea>
+                </div>
 
-                <input type="submit" class="btn btn-primary my-3" value="Salva">
+                <input type="submit" class="btn btn-primary my-2" value="Salva">
             
             </form>
         </div>

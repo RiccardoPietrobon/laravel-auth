@@ -34,9 +34,19 @@
 
             </div>
 
+            @if (session('message'))
+                <div class="alert alert-{{ session('message_type') ? session('message_type') : 'info' }}">
+                    {{ session('message') }}
+                </div>
+            @endif
+
             @yield('content')
         </main>
     </div>
+
+    
+
+    @yield('modals')
 </body>
 
 </html>

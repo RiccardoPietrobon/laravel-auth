@@ -12,17 +12,25 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $projects = Project::paginate(10);
-        return view('admin.projects.index', compact('projects'));
+        $sort = (!empty($sort_request = $request->get('sort'))) ? $sort_request : "updated_at";
+        $order = (!empty($order_request = $request->get('order'))) ? $order_request : "DESC";
+
+        $projects = Project::orderBy($sort, $order)->paginate(10)->withQueryString(); //me li ordina per update e mi mostra i primi 10 elementi
+
+
+        return view('admin.projects.index', compact('projects', 'sort', 'order')); //passo anche sort e orderper sapere l'ordine
     }
 
     /**
      * Show the form for creating a new resource.
      *
+     * 
      * @return \Illuminate\Http\Response
      */
     public function create()
@@ -38,12 +46,30 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate(
+            [
+                'title' => 'required|string|max:100',
+                'text' => 'required|string',
+                'image' => 'nullable|url',
+            ],
+            [
+                'title.required' => 'Il titolo è obbligatorio',
+                'title.string' => 'Il titolo deve essere una stringa',
+                'title.max' => 'Il titolo può avere un massimo di 100 caratteri',
+
+                'text.required' => 'Il titolo è obbligatorio',
+                'text.string' => 'Il testo deve essere una stringa',
+
+                'image.url' => 'L\'immagine deve essere un url',
+            ]
+        );
         $project = new Project;
         $project->fill($request->all());
-        $project->slug = Project::generateSlug($project->title);
+        $project->slug = Project::generateUniqueSlug($project->title);
         $project->save();
 
-        return to_route('admin.projects.show', $project);
+        return to_route('admin.projects.show', $project)
+            ->with('message', 'Progetto creato correttamente');
     }
 
     /**
@@ -77,7 +103,30 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
-        //
+        $request->validate(
+            [
+                'title' => 'required|string|max:100',
+                'text' => 'required|string',
+                'image' => 'nullable|url',
+            ],
+            [
+                'title.required' => 'Il titolo è obbligatorio',
+                'title.string' => 'Il titolo deve essere una stringa',
+                'title.max' => 'Il titolo può avere un massimo di 100 caratteri',
+
+                'text.required' => 'Il titolo è obbligatorio',
+                'text.string' => 'Il testo deve essere una stringa',
+
+                'image.url' => 'L\'immagine deve essere un url',
+            ]
+        );
+
+        $project->fill($request->all()); //non usiamo update perchè avrebbe salvato prima di generare il nuovo slug
+        $project->slug = Project::generateUniqueSlug($project->title);
+        $project->save();
+
+        return to_route('admin.projects.show', $project)
+            ->with('message', 'Progetto modificato correttamente');
     }
 
     /**
@@ -88,6 +137,9 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $project->delete();
+        return to_route('admin.projects.index', $project)
+            ->with('message_type', 'danger')
+            ->with('message', 'Progetto eliminato definitivamente');
     }
 }

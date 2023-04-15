@@ -4,7 +4,11 @@
 
 
 @section('content')
+
+    
+
     <section>
+        <img src="{{ $project->image }}" alt="" width="400" class="my-3">
         <p>
             <strong>Descrizione</strong>
             <br>
