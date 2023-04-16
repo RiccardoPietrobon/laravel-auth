@@ -8,7 +8,7 @@
             Torna indietro
         </a>
         @if ($project->id)
-            <a href="{{route('admin.projects.show')}}" class="btn btn-dark mx-1">
+            <a href="{{route('admin.projects.show', $project)}}" class="btn btn-dark mx-1">
             Mostrami il progetto
             </a>
         @endif
@@ -42,6 +42,18 @@
                         @enderror
                     </div>
                 </div>
+
+                <div class="row my-2 justify-content-center">
+                    <div class="col-8">
+                        <label for="published" class="form-label">Pubblicato</label>
+                        <input type="checkbox" name="published" id="published" class="form-check-control @error('published') is-invalid @enderror" @checked(old('published', $project->published)) value="1"/>
+                        @error('published')    
+                            <div class="invalid-feedback">
+                                {{$message}}
+                            </div>
+                        @enderror
+                    </div>
+                </div>
                 
                 <div class="row my-2 justify-content-center">
                     <div class="col-5">
@@ -54,7 +66,7 @@
                         @enderror
                     </div>
                     <div class="col-3">
-                        <img src="{{ $project->image }}" alt="">
+                        <img src="{{ $project->getImageUri() }}" alt=""  width="400">
                     </div>
                 </div>
                 
@@ -72,10 +84,29 @@
                 
                 <div class="row my-2 justify-content-end">
                     <div class="col-3">
-                        <input type="submit" class="btn btn-primary my-2" value="Salva">
+                        <input type="submit" class="btn btn-primary my-2" value="Salva" id="image-preview">
                     </div>
                 </div>
             </form>
         </div>
     </section>
+@endsection
+
+@section('scripts')
+    <script>
+        const imageInputEl = document.getElementById('image');
+        const imagePreviewEl = document.getElementById('image-preview');
+        const placeholder = imagePreviewEl.src;
+
+        imageInputEl.addEventListener('change', () => {
+            if(imageInputEl.files[0] && imageInputEl.files[0]){
+                const reader = new FileReader();
+                reader.readAsDataURL(imageInputEl.files[0]);
+
+                reader.onload = e => {
+                    imagePreviewEl.src = e.target.result;
+                }
+            } else imagePreviewEl.src = placeholder;
+        })
+    </script>
 @endsection

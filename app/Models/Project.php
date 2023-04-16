@@ -11,7 +11,7 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'image', 'text'];
+    protected $fillable = ['title', 'image', 'text', 'published'];
 
     public function getAbstract($max = 50)
     {
@@ -40,5 +40,10 @@ class Project extends Model
     protected function getCreatedAtAttribute($value)
     {
         return date('d/m/Y H:i', strtotime($value)); //setta questo attributo
+    }
+
+    public function getImageUri()
+    {
+        return $this->image ? asset('storage/' . $this->image) : "https://img.freepik.com/free-vector/luxury-gradient-modern-abstract-background_343694-1911.jpg"; //setta questo attributo così posso avere sempre un placeholder
     }
 }

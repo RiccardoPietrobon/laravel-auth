@@ -120,6 +120,7 @@ class ProjectController extends Controller
                 'title' => 'required|string|max:100',
                 'text' => 'required|string',
                 'image' => 'nullable|image|mimes:jpg,png,jpeg',
+                'published' => 'boolean',
             ],
             [
                 'title.required' => 'Il titolo è obbligatorio',
@@ -134,9 +135,20 @@ class ProjectController extends Controller
             ]
         );
 
-        $project->fill($request->all()); //non usiamo update perchè avrebbe salvato prima di generare il nuovo slug
-        $project->slug = Project::generateUniqueSlug($project->title);
-        $project->save();
+        $data = $request->all();
+        $data["slug"] = Project::generateUniqueSlug($data["title"]);
+        $data["published"] = $request->has("published") ? 1 : 0;
+
+
+
+        if (Arr::exists($data, 'image')) { //se esiste l'immagine
+            if ($project->image) Storage::delete($project->image); //cancellala
+            $path = Storage::put('uploads/progetti', $data['image']); //viene caricata nello storage
+            $data['image'] = $path; //successivamente passa nel fill
+        }
+
+        $project->update($data);
+
 
         return to_route('admin.projects.show', $project)
             ->with('message', 'Progetto modificato correttamente');
@@ -150,6 +162,9 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+
+        if ($project->image) Storage::delete($project->image); //cancellala
+
         $project->delete();
         return to_route('admin.projects.index', $project)
             ->with('message_type', 'danger')

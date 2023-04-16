@@ -8,7 +8,7 @@
     
 
     <section>
-        <img src="{{ $project->image ? asset('storage/' . $project->image) : "https://img.freepik.com/free-vector/luxury-gradient-modern-abstract-background_343694-1911.jpg"}}" alt="" width="400" class="my-3">
+        <img src="{{ $project->getImageUri() }}" alt="" width="400" class="my-3">
         <p>
             <strong>Descrizione</strong>
             <br>
