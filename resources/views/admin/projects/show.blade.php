@@ -8,7 +8,7 @@
     
 
     <section>
-        <img src="{{ $project->image }}" alt="" width="400" class="my-3">
+        <img src="{{ $project->image ? asset('storage/' . $project->image) : "https://img.freepik.com/free-vector/luxury-gradient-modern-abstract-background_343694-1911.jpg"}}" alt="" width="400" class="my-3">
         <p>
             <strong>Descrizione</strong>
             <br>
@@ -16,6 +16,8 @@
         </p>
 
         <a href="{{route('admin.projects.index')}}" class="btn btn-primary">Torna indietro</a>
+        <a href="{{route('admin.projects.edit', $project)}}" class="btn btn-primary">Modifica</a>
+
     </section>
 
 @endsection

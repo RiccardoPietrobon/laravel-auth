@@ -21,7 +21,7 @@ class ProjectSeeder extends Seeder
             $project = new Project;
             $project->title = $faker->catchPhrase();
             $project->slug = Str::of($project->title)->slug('-');
-            $project->image = $faker->imageUrl(640, 480, 'cars', true);
+            //$project->image = $faker->imageUrl(640, 480, 'cars', true); commento perchè in questo momento voglio solo file caricati
             $project->text = $faker->paragraph(15);
             $project->save();
         }

@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Arr; //classe per gli array
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -35,7 +36,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('admin.projects.create');
+        $project = new Project;
+        return view('admin.projects.form', compact('project'));
     }
 
     /**
@@ -50,7 +52,7 @@ class ProjectController extends Controller
             [
                 'title' => 'required|string|max:100',
                 'text' => 'required|string',
-                'image' => 'nullable|url',
+                'image' => 'nullable|image|mimes:jpg,png,jpeg',
             ],
             [
                 'title.required' => 'Il titolo è obbligatorio',
@@ -60,11 +62,21 @@ class ProjectController extends Controller
                 'text.required' => 'Il titolo è obbligatorio',
                 'text.string' => 'Il testo deve essere una stringa',
 
-                'image.url' => 'L\'immagine deve essere un url',
+                'image.image' => 'Il file caricato deve essere un\'immagine',
+                'image.mimes' => 'L\'immagine deve essere un file jpg, png o jpeg',
+
             ]
         );
+
+        $data = $request->all();
+
+        if (Arr::exists($data, 'image')) { //se esiste l'immagine
+            $path = Storage::put('uploads/progetti', $data['image']); //viene caricata nello storage
+            $data['image'] = $path; //successivamente passa nel fill
+        }
+
         $project = new Project;
-        $project->fill($request->all());
+        $project->fill($data);
         $project->slug = Project::generateUniqueSlug($project->title);
         $project->save();
 
@@ -91,7 +103,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('admin.projects.edit', compact('project'));
+        return view('admin.projects.form', compact('project'));
     }
 
     /**
@@ -107,7 +119,7 @@ class ProjectController extends Controller
             [
                 'title' => 'required|string|max:100',
                 'text' => 'required|string',
-                'image' => 'nullable|url',
+                'image' => 'nullable|image|mimes:jpg,png,jpeg',
             ],
             [
                 'title.required' => 'Il titolo è obbligatorio',
@@ -117,7 +129,8 @@ class ProjectController extends Controller
                 'text.required' => 'Il titolo è obbligatorio',
                 'text.string' => 'Il testo deve essere una stringa',
 
-                'image.url' => 'L\'immagine deve essere un url',
+                'image.image' => 'Il file caricato deve essere un\'immagine',
+                'image.mimes' => 'L\'immagine deve essere un file jpg, png o jpeg',
             ]
         );
 
