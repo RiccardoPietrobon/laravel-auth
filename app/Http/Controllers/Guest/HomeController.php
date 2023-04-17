@@ -13,4 +13,11 @@ class HomeController extends Controller
         $good_projects = Project::where('published', 1)->orderBy('updated_at', 'DESC')->get();
         return view('guest.home', compact('good_projects'));
     }
+
+    public function show()
+    {
+        $good_projects = Project::where('published', 1)->orderBy('updated_at', 'DESC')->get();
+
+        return view('guest.projects.show', compact('good_project'));
+    }
 }
