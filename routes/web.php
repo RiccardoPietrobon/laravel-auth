@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [GuestHomeController::class, 'index']); //rotte statiche
-Route::get('guest/good_projects/{good_project}', [GuestHomeController::class, 'show'])->name('good_projects.show'); //rotte show
+Route::get('/guest/projects/{project}', [GuestHomeController::class, 'show'])->name('guest.projects.show'); //rotte show
 
 
 Route::get('/home', [ProjectController::class, 'index'])->middleware('auth')->name('home'); //verifica una rotta singola

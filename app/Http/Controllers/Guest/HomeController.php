@@ -18,6 +18,9 @@ class HomeController extends Controller
     {
         $good_projects = Project::where('published', 1)->orderBy('updated_at', 'DESC')->get();
 
+        foreach ($good_projects as $good_project) {
+        }
+
         return view('guest.projects.show', compact('good_project'));
     }
 }

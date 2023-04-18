@@ -12,7 +12,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{$good_project->title}}</h5>
                         <p class="card-text">{{$good_project->getAbstract(20)}}</p>
-                        <a href="{{ route('guest.projects.show', $good_project) }}" class="btn btn-dark">Go somewhere</a>
+                        <a href="{{ route('guest.projects.show', $good_project) }}" class="btn btn-dark">Dettaglio</a>
                     </div>
                 </div>
             @endforeach
